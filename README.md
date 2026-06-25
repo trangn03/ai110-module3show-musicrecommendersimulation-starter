@@ -11,23 +11,28 @@ Your goal is to:
 - Evaluate what your system gets right and wrong
 - Reflect on how this mirrors real world AI recommenders
 
-Replace this paragraph with your own summary of what your version does.
-
 ---
 
 ## How The System Works
 
-Explain your design in plain language.
+Real-world recommenders like Spotify or YouTube learn from massive amounts of behavioral data — what you skip, replay, or add to a playlist — and combine that with audio features and what similar users liked (collaborative filtering). They are powerful but opaque: the system optimizes for engagement, which can create filter bubbles where you only ever hear what you already know. This version takes a simpler, more transparent approach. Instead of learning from behavior, it scores every song directly against a user's stated preferences using a weighted formula: genre and mood account for most of the score because they capture intent most clearly, energy is matched by proximity (closer to the user's target is better, not just higher or lower), and acousticness handles the remaining dimension. Every recommendation comes with a plain-language explanation so the reasoning is always visible. The priority here is interpretability over accuracy — a small system you can fully understand and debug.
 
-Some prompts to answer:
+**Song features:** Each song carries 10 attributes — `id`, `title`, and `artist` (identity only, not scored), plus `genre`, `mood`, `energy`, `tempo_bpm`, `valence`, `danceability`, and `acousticness`. The scoring formula actively uses `genre`, `mood`, `energy`, and `acousticness`.
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+**UserProfile fields:** `favorite_genre` (str), `favorite_mood` (str), `target_energy` (float 0–1), `likes_acoustic` (bool).
 
-You can include a simple diagram or bullet list if helpful.
+**Scoring:** Every song receives a score between 0 and 1 from this weighted formula:
+
+| Feature | Weight | Method |
+| --- | --- | --- |
+| `genre` | 40% | +0.40 if exact match |
+| `mood` | 30% | +0.30 if exact match |
+| `energy` | 20% | `1 - abs(target_energy - song.energy)` scaled by 0.20 |
+| `acousticness` | 10% | proximity to 0.8 (acoustic fan) or 0.2 (non-acoustic) scaled by 0.10 |
+
+Numerical features use proximity scoring — a song is rewarded for being *close* to the user's preference, not for simply having a high or low value.
+
+**Selection:** All songs are scored, sorted descending, and the top `k` (default 5) are returned along with a plain-language explanation of which features matched.
 
 ---
 
@@ -36,13 +41,14 @@ You can include a simple diagram or bullet list if helpful.
 ### Setup
 
 1. Create a virtual environment (optional but recommended):
-
-   ```bash
+  
+```bash
    python -m venv .venv
    source .venv/bin/activate      # Mac or Linux
-   .venv\Scripts\activate         # Windows
+   .venv\Scripts\activate # Windows
+```
 
-2. Install dependencies
+1. Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -63,7 +69,6 @@ pytest
 ```
 
 You can add more tests in `tests/test_recommender.py`.
-```
 
 ---
 
@@ -118,6 +123,4 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
-
-
 
