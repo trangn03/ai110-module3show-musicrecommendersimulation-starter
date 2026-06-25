@@ -34,6 +34,56 @@ USERS = {
         "tempo_bpm": 70,
         "likes_acoustic": True,
     },
+    # --- Adversarial / edge-case profiles ---
+    "Sad Raver [conflict: high energy + sad mood]": {
+        "genre": "EDM",
+        "mood": "sad",
+        "energy": 0.97,
+        "tempo_bpm": 128,
+        "likes_acoustic": False,
+    },
+    "K-Pop Stan [edge: unknown genre]": {
+        "genre": "k-pop",
+        "mood": "happy",
+        "energy": 0.75,
+        "tempo_bpm": 125,
+        "likes_acoustic": False,
+    },
+    "Max Everything [edge: all extremes]": {
+        "genre": "metal",
+        "mood": "angry",
+        "energy": 1.0,
+        "tempo_bpm": 200,
+        "likes_acoustic": False,
+    },
+    "Perfectly Neutral [edge: all midpoints]": {
+        "genre": "lofi",
+        "mood": "chill",
+        "energy": 0.5,
+        "tempo_bpm": 100,
+        "likes_acoustic": True,
+    },
+    "Unplugged Gymrat [conflict: acoustic + high energy]": {
+        "genre": "folk",
+        "mood": "peaceful",
+        "energy": 0.9,
+        "tempo_bpm": 150,
+        "likes_acoustic": True,
+    },
+    "Silence Seeker [edge: zero energy + zero bpm]": {
+        "genre": "classical",
+        "mood": "melancholic",
+        "energy": 0.0,
+        "tempo_bpm": 0,
+        "likes_acoustic": True,
+    },
+    "Genre Avoider [edge: near-tie songs]": {
+        "genre": "lofi",
+        "mood": "focused",
+        "energy": 0.40,
+        "tempo_bpm": 80,
+        "likes_acoustic": True,
+    },
 }
 
 

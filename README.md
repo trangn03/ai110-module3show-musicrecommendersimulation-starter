@@ -116,7 +116,7 @@ You can add more tests in `tests/test_recommender.py`.
 ## Sample Recommendation Output
 
 Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
-
+### Standard Profile
 ```
 Loaded songs: 20
 
@@ -282,8 +282,402 @@ Loaded songs: 20
 
 ==================================================
 ```
+### Adversarial & Edge Case User Profiles
+```
+==================================================
+  USER: Sad Raver [conflict: high energy + sad mood]
+==================================================
+  genre       : EDM
+  mood        : sad
+  energy      : 0.97
+  tempo_bpm   : 128
+  likes_acoustic: False
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Neon Pulse by DataWave
+    Score : 0.71 / 1.00
+    Genre : EDM  |  Mood: euphoric
+    Why   :
+      - genre matches (EDM)
+      - energy proximity 0.20 (song=0.97, target=0.97)
+      - tempo proximity 0.10 (song=128.0 bpm)
+
+#2  Dusty Road by Blue Ember
+    Score : 0.51 / 1.00
+    Genre : blues  |  Mood: sad
+    Why   :
+      - mood matches (sad)
+      - energy proximity 0.07 (song=0.33, target=0.97)
+      - tempo proximity 0.07 (song=75.0 bpm)
+
+#3  Storm Runner by Voltline
+    Score : 0.41 / 1.00
+    Genre : rock  |  Mood: intense
+    Why   :
+      - energy proximity 0.19 (song=0.91, target=0.97)
+      - tempo proximity 0.09 (song=152.0 bpm)
+
+#4  Red Lights by Crimson Drift
+    Score : 0.41 / 1.00
+    Genre : metal  |  Mood: angry
+    Why   :
+      - energy proximity 0.20 (song=0.96, target=0.97)
+      - tempo proximity 0.08 (song=168.0 bpm)
+
+#5  Depth Charge by Bass Reactor
+    Score : 0.41 / 1.00
+    Genre : electronic  |  Mood: energetic
+    Why   :
+      - energy proximity 0.20 (song=0.95, target=0.97)
+      - tempo proximity 0.09 (song=140.0 bpm)
+
+==================================================
+
+==================================================
+  USER: K-Pop Stan [edge: unknown genre]
+==================================================
+  genre       : k-pop
+  mood        : happy
+  energy      : 0.75
+  tempo_bpm   : 125
+  likes_acoustic: False
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Rooftop Lights by Indigo Parade
+    Score : 0.66 / 1.00
+    Genre : indie pop  |  Mood: happy
+    Why   :
+      - mood matches (happy)
+      - energy proximity 0.20 (song=0.76, target=0.75)
+      - tempo proximity 0.10 (song=124.0 bpm)
+
+#2  Sunrise City by Neon Echo
+    Score : 0.65 / 1.00
+    Genre : pop  |  Mood: happy
+    Why   :
+      - mood matches (happy)
+      - energy proximity 0.19 (song=0.82, target=0.75)
+      - tempo proximity 0.10 (song=118.0 bpm)
+
+#3  Night Drive Loop by Neon Echo
+    Score : 0.43 / 1.00
+    Genre : synthwave  |  Mood: moody
+    Why   :
+      - energy proximity 0.20 (song=0.75, target=0.75)
+      - tempo proximity 0.09 (song=110.0 bpm)
+
+#4  Concrete Jungle by MC Verse
+    Score : 0.39 / 1.00
+    Genre : hip-hop  |  Mood: energetic
+    Why   :
+      - energy proximity 0.19 (song=0.8, target=0.75)
+      - tempo proximity 0.09 (song=95.0 bpm)
+
+#5  Storm Runner by Voltline
+    Score : 0.39 / 1.00
+    Genre : rock  |  Mood: intense
+    Why   :
+      - energy proximity 0.17 (song=0.91, target=0.75)
+      - tempo proximity 0.09 (song=152.0 bpm)
+
+==================================================
+
+==================================================
+  USER: Max Everything [edge: all extremes]
+==================================================
+  genre       : metal
+  mood        : angry
+  energy      : 1.0
+  tempo_bpm   : 200
+  likes_acoustic: False
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Red Lights by Crimson Drift
+    Score : 0.96 / 1.00
+    Genre : metal  |  Mood: angry
+    Why   :
+      - genre matches (metal)
+      - mood matches (angry)
+      - energy proximity 0.19 (song=0.96, target=1.0)
+      - tempo proximity 0.08 (song=168.0 bpm)
+
+#2  Storm Runner by Voltline
+    Score : 0.39 / 1.00
+    Genre : rock  |  Mood: intense
+    Why   :
+      - energy proximity 0.18 (song=0.91, target=1.0)
+      - tempo proximity 0.08 (song=152.0 bpm)
+
+#3  Depth Charge by Bass Reactor
+    Score : 0.38 / 1.00
+    Genre : electronic  |  Mood: energetic
+    Why   :
+      - energy proximity 0.19 (song=0.95, target=1.0)
+      - tempo proximity 0.07 (song=140.0 bpm)
+
+#4  Neon Pulse by DataWave
+    Score : 0.37 / 1.00
+    Genre : EDM  |  Mood: euphoric
+    Why   :
+      - energy proximity 0.19 (song=0.97, target=1.0)
+      - tempo proximity 0.06 (song=128.0 bpm)
+
+#5  Gym Hero by Max Pulse
+    Score : 0.36 / 1.00
+    Genre : pop  |  Mood: intense
+    Why   :
+      - energy proximity 0.19 (song=0.93, target=1.0)
+      - tempo proximity 0.07 (song=132.0 bpm)
+
+==================================================
+
+==================================================
+  USER: Perfectly Neutral [edge: all midpoints]
+==================================================
+  genre       : lofi
+  mood        : chill
+  energy      : 0.5
+  tempo_bpm   : 100
+  likes_acoustic: True
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Midnight Coding by LoRoom
+    Score : 0.96 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - genre matches (lofi)
+      - mood matches (chill)
+      - energy proximity 0.18 (song=0.42, target=0.5)
+      - tempo proximity 0.09 (song=78.0 bpm)
+
+#2  Library Rain by Paper Lanterns
+    Score : 0.94 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - genre matches (lofi)
+      - mood matches (chill)
+      - energy proximity 0.17 (song=0.35, target=0.5)
+      - tempo proximity 0.09 (song=72.0 bpm)
+
+#3  Focus Flow by LoRoom
+    Score : 0.71 / 1.00
+    Genre : lofi  |  Mood: focused
+    Why   :
+      - genre matches (lofi)
+      - energy proximity 0.18 (song=0.4, target=0.5)
+      - tempo proximity 0.09 (song=80.0 bpm)
+
+#4  Spacewalk Thoughts by Orbit Bloom
+    Score : 0.62 / 1.00
+    Genre : ambient  |  Mood: chill
+    Why   :
+      - mood matches (chill)
+      - energy proximity 0.16 (song=0.28, target=0.5)
+      - tempo proximity 0.08 (song=60.0 bpm)
+
+#5  Last Train Home by The Static
+    Score : 0.43 / 1.00
+    Genre : country  |  Mood: nostalgic
+    Why   :
+      - energy proximity 0.19 (song=0.45, target=0.5)
+      - tempo proximity 0.09 (song=88.0 bpm)
+
+==================================================
+
+==================================================
+  USER: Unplugged Gymrat [conflict: acoustic + high energy]
+==================================================
+  genre       : folk
+  mood        : peaceful
+  energy      : 0.9
+  tempo_bpm   : 150
+  likes_acoustic: True
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Mountain Echo by Pine & Wire
+    Score : 0.82 / 1.00
+    Genre : folk  |  Mood: peaceful
+    Why   :
+      - genre matches (folk)
+      - mood matches (peaceful)
+      - energy proximity 0.08 (song=0.3, target=0.9)
+      - tempo proximity 0.06 (song=70.0 bpm)
+
+#2  Storm Runner by Voltline
+    Score : 0.40 / 1.00
+    Genre : rock  |  Mood: intense
+    Why   :
+      - energy proximity 0.20 (song=0.91, target=0.9)
+      - tempo proximity 0.10 (song=152.0 bpm)
+
+#3  Red Lights by Crimson Drift
+    Score : 0.38 / 1.00
+    Genre : metal  |  Mood: angry
+    Why   :
+      - energy proximity 0.19 (song=0.96, target=0.9)
+      - tempo proximity 0.09 (song=168.0 bpm)
+
+#4  Depth Charge by Bass Reactor
+    Score : 0.37 / 1.00
+    Genre : electronic  |  Mood: energetic
+    Why   :
+      - energy proximity 0.19 (song=0.95, target=0.9)
+      - tempo proximity 0.10 (song=140.0 bpm)
+
+#5  Gym Hero by Max Pulse
+    Score : 0.37 / 1.00
+    Genre : pop  |  Mood: intense
+    Why   :
+      - energy proximity 0.19 (song=0.93, target=0.9)
+      - tempo proximity 0.09 (song=132.0 bpm)
+
+==================================================
+
+==================================================
+  USER: Silence Seeker [edge: zero energy + zero bpm]
+==================================================
+  genre       : classical
+  mood        : melancholic
+  energy      : 0.0
+  tempo_bpm   : 0
+  likes_acoustic: True
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Rainy Window by Ashen Keys
+    Score : 0.90 / 1.00
+    Genre : classical  |  Mood: melancholic
+    Why   :
+      - genre matches (classical)
+      - mood matches (melancholic)
+      - energy proximity 0.16 (song=0.22, target=0.0)
+      - tempo proximity 0.07 (song=58.0 bpm)
+
+#2  Spacewalk Thoughts by Orbit Bloom
+    Score : 0.35 / 1.00
+    Genre : ambient  |  Mood: chill
+    Why   :
+      - energy proximity 0.14 (song=0.28, target=0.0)
+      - tempo proximity 0.07 (song=60.0 bpm)
+
+#3  Mountain Echo by Pine & Wire
+    Score : 0.34 / 1.00
+    Genre : folk  |  Mood: peaceful
+    Why   :
+      - energy proximity 0.14 (song=0.3, target=0.0)
+      - tempo proximity 0.07 (song=70.0 bpm)
+
+#4  Dusty Road by Blue Ember
+    Score : 0.34 / 1.00
+    Genre : blues  |  Mood: sad
+    Why   :
+      - energy proximity 0.13 (song=0.33, target=0.0)
+      - tempo proximity 0.06 (song=75.0 bpm)
+
+#5  Library Rain by Paper Lanterns
+    Score : 0.33 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - energy proximity 0.13 (song=0.35, target=0.0)
+      - tempo proximity 0.06 (song=72.0 bpm)
+
+==================================================
+
+==================================================
+  USER: Genre Avoider [edge: near-tie songs]
+==================================================
+  genre       : lofi
+  mood        : focused
+  energy      : 0.4
+  tempo_bpm   : 80
+  likes_acoustic: True
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Focus Flow by LoRoom
+    Score : 0.99 / 1.00
+    Genre : lofi  |  Mood: focused
+    Why   :
+      - genre matches (lofi)
+      - mood matches (focused)
+      - energy proximity 0.20 (song=0.4, target=0.4)
+      - tempo proximity 0.10 (song=80.0 bpm)
+
+#2  Midnight Coding by LoRoom
+    Score : 0.73 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - genre matches (lofi)
+      - energy proximity 0.20 (song=0.42, target=0.4)
+      - tempo proximity 0.10 (song=78.0 bpm)
+
+#3  Library Rain by Paper Lanterns
+    Score : 0.72 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - genre matches (lofi)
+      - energy proximity 0.19 (song=0.35, target=0.4)
+      - tempo proximity 0.10 (song=72.0 bpm)
+
+#4  Last Train Home by The Static
+    Score : 0.43 / 1.00
+    Genre : country  |  Mood: nostalgic
+    Why   :
+      - energy proximity 0.19 (song=0.45, target=0.4)
+      - tempo proximity 0.10 (song=88.0 bpm)
+
+#5  Dusty Road by Blue Ember
+    Score : 0.42 / 1.00
+    Genre : blues  |  Mood: sad
+    Why   :
+      - energy proximity 0.19 (song=0.33, target=0.4)
+      - tempo proximity 0.10 (song=75.0 bpm)
+
+==================================================
+```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
+
+---
+
+These profiles are designed to stress-test the scoring logic — either by combining contradictory preferences or by pushing inputs to their limits. All 7 are included in `src/main.py` and appear in the terminal output above.
+
+| Profile name | Type | What it tests |
+| --- | --- | --- |
+| Sad Raver | Conflict | `energy=0.97` + `mood=sad` — no song in the catalog satisfies both. The genre+energy winner (Neon Pulse) surfaces at #1 with its mood mismatch silently ignored. |
+| K-Pop Stan | Edge | `genre=k-pop` does not exist in the catalog. The 30% genre weight is permanently lost with no warning — score ceiling invisibly drops to 0.70. |
+| Max Everything | Edge | `tempo_bpm=200` equals the normalization divisor, so every song's tempo score is less than 0.10. `energy=1.0` means no song achieves a perfect energy score either. |
+| Perfectly Neutral | Edge | All numeric preferences at midpoints (0.5). Proximity scores compress into a narrow band, so the 55% categorical weight (genre + mood) dominates almost entirely. |
+| Unplugged Gymrat | Conflict | `likes_acoustic=True` + `energy=0.9` — high-acousticness songs have low energy by nature. Mountain Echo wins on genre+mood despite scoring only 0.08/0.20 on energy. |
+| Silence Seeker | Edge | `energy=0.0` and `tempo_bpm=0` are valid inputs but never validated. `tempo_bpm=0` causes every song to be penalized; no song with `energy=0.0` exists, so everyone loses energy score. |
+| Genre Avoider | Edge | Preferences nearly identical to two catalog songs (Focus Flow and Midnight Coding). Tests how the sort handles near-ties — ties broken silently by catalog order. |
+
+### Key findings from actual output
+
+- **Sad Raver:** #1 is Neon Pulse (genre+energy match, 0.71) — the 25% mood miss is simply absorbed with no signal to the user. #2 is Dusty Road (mood match only, 0.51) — the system splits the vote but never explains the conflict.
+- **K-Pop Stan:** Top score is 0.66, well below the 0.96+ scores normal users achieve. A real system should warn "your favorite genre isn't in our catalog."
+- **Max Everything:** Red Lights still wins correctly (0.96) because the 55% categorical weight survives even when tempo scoring is broken.
+- **Unplugged Gymrat:** Mountain Echo wins at 0.82 despite an energy proximity of only 0.08/0.20. The genre+mood bonus (0.55) outweighs the combined penalty on energy, tempo, and acoustic signal — the two conflicting preferences are never flagged.
+- **Silence Seeker:** `tempo_bpm=0` is accepted silently and Rainy Window wins cleanly — the system degrades gracefully but provides no hint that the input is unusual.
 
 ---
 
