@@ -659,28 +659,6 @@ Loaded songs: 20
 
 ---
 
-These profiles are designed to stress-test the scoring logic — either by combining contradictory preferences or by pushing inputs to their limits. All 7 are included in `src/main.py` and appear in the terminal output above.
-
-| Profile name | Type | What it tests |
-| --- | --- | --- |
-| Sad Raver | Conflict | `energy=0.97` + `mood=sad` — no song in the catalog satisfies both. The genre+energy winner (Neon Pulse) surfaces at #1 with its mood mismatch silently ignored. |
-| K-Pop Stan | Edge | `genre=k-pop` does not exist in the catalog. The 30% genre weight is permanently lost with no warning — score ceiling invisibly drops to 0.70. |
-| Max Everything | Edge | `tempo_bpm=200` equals the normalization divisor, so every song's tempo score is less than 0.10. `energy=1.0` means no song achieves a perfect energy score either. |
-| Perfectly Neutral | Edge | All numeric preferences at midpoints (0.5). Proximity scores compress into a narrow band, so the 55% categorical weight (genre + mood) dominates almost entirely. |
-| Unplugged Gymrat | Conflict | `likes_acoustic=True` + `energy=0.9` — high-acousticness songs have low energy by nature. Mountain Echo wins on genre+mood despite scoring only 0.08/0.20 on energy. |
-| Silence Seeker | Edge | `energy=0.0` and `tempo_bpm=0` are valid inputs but never validated. `tempo_bpm=0` causes every song to be penalized; no song with `energy=0.0` exists, so everyone loses energy score. |
-| Genre Avoider | Edge | Preferences nearly identical to two catalog songs (Focus Flow and Midnight Coding). Tests how the sort handles near-ties — ties broken silently by catalog order. |
-
-### Key findings from actual output
-
-- **Sad Raver:** #1 is Neon Pulse (genre+energy match, 0.71) — the 25% mood miss is simply absorbed with no signal to the user. #2 is Dusty Road (mood match only, 0.51) — the system splits the vote but never explains the conflict.
-- **K-Pop Stan:** Top score is 0.66, well below the 0.96+ scores normal users achieve. A real system should warn "your favorite genre isn't in our catalog."
-- **Max Everything:** Red Lights still wins correctly (0.96) because the 55% categorical weight survives even when tempo scoring is broken.
-- **Unplugged Gymrat:** Mountain Echo wins at 0.82 despite an energy proximity of only 0.08/0.20. The genre+mood bonus (0.55) outweighs the combined penalty on energy, tempo, and acoustic signal — the two conflicting preferences are never flagged.
-- **Silence Seeker:** `tempo_bpm=0` is accepted silently and Rainy Window wins cleanly — the system degrades gracefully but provides no hint that the input is unusual.
-
----
-
 ## Experiments You Tried
 
 Use this section to document the experiments you ran. For example:
