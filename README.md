@@ -96,6 +96,10 @@ pip install -r requirements.txt
 ```bash
 python -m src.main
 ```
+or
+```bash
+python src/main.py
+```
 
 ### Running Tests
 
@@ -114,12 +118,59 @@ You can add more tests in `tests/test_recommender.py`.
 Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
 
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+Loaded songs: 20
+
+==================================================
+  USER PROFILE
+==================================================
+  genre       : pop
+  mood        : happy
+  energy      : 0.8
+
+==================================================
+  TOP RECOMMENDATIONS
+==================================================
+
+#1  Sunrise City by Neon Echo
+    Score : 0.96 / 1.00
+    Genre : pop  |  Mood: happy
+    Why   :
+      - genre matches (pop)
+      - mood matches (happy)
+      - energy proximity 0.20 (song=0.82, target=0.8)
+      - tempo proximity 0.10 (song=118.0 bpm)
+
+#2  Gym Hero by Max Pulse
+    Score : 0.68 / 1.00
+    Genre : pop  |  Mood: intense
+    Why   :
+      - genre matches (pop)
+      - energy proximity 0.17 (song=0.93, target=0.8)
+      - tempo proximity 0.09 (song=132.0 bpm)
+
+#3  Rooftop Lights by Indigo Parade
+    Score : 0.65 / 1.00
+    Genre : indie pop  |  Mood: happy
+    Why   :
+      - mood matches (happy)
+      - energy proximity 0.19 (song=0.76, target=0.8)
+      - tempo proximity 0.10 (song=124.0 bpm)
+
+#4  Night Drive Loop by Neon Echo
+    Score : 0.42 / 1.00
+    Genre : synthwave  |  Mood: moody
+    Why   :
+      - energy proximity 0.19 (song=0.75, target=0.8)
+      - tempo proximity 0.10 (song=110.0 bpm)
+
+#5  Concrete Jungle by MC Verse
+    Score : 0.41 / 1.00
+    Genre : hip-hop  |  Mood: energetic
+    Why   :
+      - energy proximity 0.20 (song=0.8, target=0.8)
+      - tempo proximity 0.09 (song=95.0 bpm)
+
+==================================================
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
