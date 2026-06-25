@@ -121,15 +121,73 @@ Paste a sample of your recommender's output here as a text block so a reader can
 Loaded songs: 20
 
 ==================================================
-  USER PROFILE
+  USER: Late-night coder
+==================================================
+  genre       : lofi
+  mood        : chill
+  energy      : 0.4
+  tempo_bpm   : 80
+  likes_acoustic: True
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Midnight Coding by LoRoom
+    Score : 0.98 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - genre matches (lofi)
+      - mood matches (chill)
+      - energy proximity 0.20 (song=0.42, target=0.4)
+      - tempo proximity 0.10 (song=78.0 bpm)
+
+#2  Library Rain by Paper Lanterns
+    Score : 0.97 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - genre matches (lofi)
+      - mood matches (chill)
+      - energy proximity 0.19 (song=0.35, target=0.4)
+      - tempo proximity 0.10 (song=72.0 bpm)
+
+#3  Focus Flow by LoRoom
+    Score : 0.74 / 1.00
+    Genre : lofi  |  Mood: focused
+    Why   :
+      - genre matches (lofi)
+      - energy proximity 0.20 (song=0.4, target=0.4)
+      - tempo proximity 0.10 (song=80.0 bpm)
+
+#4  Spacewalk Thoughts by Orbit Bloom
+    Score : 0.65 / 1.00
+    Genre : ambient  |  Mood: chill
+    Why   :
+      - mood matches (chill)
+      - energy proximity 0.18 (song=0.28, target=0.4)
+      - tempo proximity 0.09 (song=60.0 bpm)
+
+#5  Last Train Home by The Static
+    Score : 0.43 / 1.00
+    Genre : country  |  Mood: nostalgic
+    Why   :
+      - energy proximity 0.19 (song=0.45, target=0.4)
+      - tempo proximity 0.10 (song=88.0 bpm)
+
+==================================================
+
+==================================================
+  USER: Morning run
 ==================================================
   genre       : pop
   mood        : happy
   energy      : 0.8
+  tempo_bpm   : 130
+  likes_acoustic: False
 
-==================================================
+--------------------------------------------------
   TOP RECOMMENDATIONS
-==================================================
+--------------------------------------------------
 
 #1  Sunrise City by Neon Echo
     Score : 0.96 / 1.00
@@ -138,7 +196,7 @@ Loaded songs: 20
       - genre matches (pop)
       - mood matches (happy)
       - energy proximity 0.20 (song=0.82, target=0.8)
-      - tempo proximity 0.10 (song=118.0 bpm)
+      - tempo proximity 0.09 (song=118.0 bpm)
 
 #2  Gym Hero by Max Pulse
     Score : 0.68 / 1.00
@@ -146,7 +204,7 @@ Loaded songs: 20
     Why   :
       - genre matches (pop)
       - energy proximity 0.17 (song=0.93, target=0.8)
-      - tempo proximity 0.09 (song=132.0 bpm)
+      - tempo proximity 0.10 (song=132.0 bpm)
 
 #3  Rooftop Lights by Indigo Parade
     Score : 0.65 / 1.00
@@ -161,14 +219,66 @@ Loaded songs: 20
     Genre : synthwave  |  Mood: moody
     Why   :
       - energy proximity 0.19 (song=0.75, target=0.8)
-      - tempo proximity 0.10 (song=110.0 bpm)
+      - tempo proximity 0.09 (song=110.0 bpm)
 
-#5  Concrete Jungle by MC Verse
-    Score : 0.41 / 1.00
-    Genre : hip-hop  |  Mood: energetic
+#5  Storm Runner by Voltline
+    Score : 0.40 / 1.00
+    Genre : rock  |  Mood: intense
     Why   :
-      - energy proximity 0.20 (song=0.8, target=0.8)
-      - tempo proximity 0.09 (song=95.0 bpm)
+      - energy proximity 0.18 (song=0.91, target=0.8)
+      - tempo proximity 0.09 (song=152.0 bpm)
+
+==================================================
+
+==================================================
+  USER: Study session
+==================================================
+  genre       : ambient
+  mood        : focused
+  energy      : 0.3
+  tempo_bpm   : 70
+  likes_acoustic: True
+
+--------------------------------------------------
+  TOP RECOMMENDATIONS
+--------------------------------------------------
+
+#1  Spacewalk Thoughts by Orbit Bloom
+    Score : 0.72 / 1.00
+    Genre : ambient  |  Mood: chill
+    Why   :
+      - genre matches (ambient)
+      - energy proximity 0.20 (song=0.28, target=0.3)
+      - tempo proximity 0.10 (song=60.0 bpm)
+
+#2  Focus Flow by LoRoom
+    Score : 0.66 / 1.00
+    Genre : lofi  |  Mood: focused
+    Why   :
+      - mood matches (focused)
+      - energy proximity 0.18 (song=0.4, target=0.3)
+      - tempo proximity 0.10 (song=80.0 bpm)
+
+#3  Mountain Echo by Pine & Wire
+    Score : 0.43 / 1.00
+    Genre : folk  |  Mood: peaceful
+    Why   :
+      - energy proximity 0.20 (song=0.3, target=0.3)
+      - tempo proximity 0.10 (song=70.0 bpm)
+
+#4  Dusty Road by Blue Ember
+    Score : 0.43 / 1.00
+    Genre : blues  |  Mood: sad
+    Why   :
+      - energy proximity 0.19 (song=0.33, target=0.3)
+      - tempo proximity 0.10 (song=75.0 bpm)
+
+#5  Library Rain by Paper Lanterns
+    Score : 0.43 / 1.00
+    Genre : lofi  |  Mood: chill
+    Why   :
+      - energy proximity 0.19 (song=0.35, target=0.3)
+      - tempo proximity 0.10 (song=72.0 bpm)
 
 ==================================================
 ```
