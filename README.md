@@ -51,9 +51,9 @@ The remaining fields (`id`, `title`, `artist`) are identity fields and are not u
 
 | Feature | Weight | Rule |
 |---|---|---|
-| `genre` | **30%** | `+0.30` if `song.genre == user.favorite_genre`, else `0` |
+| `genre` | **15%** | `+0.15` if `song.genre == user.favorite_genre`, else `0` |
 | `mood` | **25%** | `+0.25` if `song.mood == user.favorite_mood`, else `0` |
-| `energy` | **20%** | `(1 - abs(user.target_energy - song.energy)) * 0.20` |
+| `energy` | **40%** | `(1 - abs(user.target_energy - song.energy)) * 0.40` |
 | `tempo_bpm` | **10%** | `(1 - abs((user_bpm/200) - (song_bpm/200))) * 0.10` |
 | `valence` | **5%** | `(1 - abs(user.target_valence - song.valence)) * 0.05` |
 | `danceability` | **5%** | `(1 - abs(user.target_danceability - song.danceability)) * 0.05` |
@@ -67,9 +67,10 @@ Numerical features use proximity scoring — a song is rewarded for being *close
 
 **Why these weights? (`score_song`)**
 
-- **Genre (30%) and mood (25%)** dominate because they reflect intent — a user asking for "chill lofi" has a clear categorical preference that should override minor numeric differences.
-- **Energy (20%)** uses proximity, not magnitude — a song is not better for being louder, only for being closer to what the user wants.
-- **Tempo, valence, danceability, acousticness (5–10% each)** act as tiebreakers between songs that already match genre and mood.
+- **Energy (40%)** is now the dominant numeric signal after the weight-shift experiment — a song is rewarded for being close to the user's target, not for simply being loud or quiet.
+- **Mood (25%)** remains the strongest categorical signal, capturing the emotional tone the user is looking for.
+- **Genre (15%)** still contributes but no longer dominates — this shift revealed that energy proximity can override genre intent when the catalog is sparse.
+- **Tempo, valence, danceability, acousticness (5–10% each)** act as tiebreakers between songs that already match on the top three features.
 
 **Example** — user: lofi / chill / energy=0.40
 
