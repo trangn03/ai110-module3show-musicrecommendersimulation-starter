@@ -39,15 +39,30 @@ class Recommender:
         """Stores the full song catalog for later scoring."""
         self.songs = songs
 
+    def _score(self, user: UserProfile, song: Song) -> float:
+        score = 0.0
+        if song.genre == user.favorite_genre:
+            score += 2.0
+        if song.mood == user.favorite_mood:
+            score += 1.0
+        score += 1.0 - abs(user.target_energy - song.energy)
+        return score
+
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
         """Returns the top-k Song objects best matching the user's profile."""
-        # TODO: Implement recommendation logic
-        return self.songs[:k]
+        ranked = sorted(self.songs, key=lambda s: self._score(user, s), reverse=True)
+        return ranked[:k]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
         """Returns a plain-language string describing why a song was recommended to this user."""
-        # TODO: Implement explanation logic
-        return "Explanation placeholder"
+        reasons = []
+        if song.genre == user.favorite_genre:
+            reasons.append(f"genre matches ({song.genre})")
+        if song.mood == user.favorite_mood:
+            reasons.append(f"mood matches ({song.mood})")
+        energy_sim = 1.0 - abs(user.target_energy - song.energy)
+        reasons.append(f"energy similarity {energy_sim:.2f} (song={song.energy}, target={user.target_energy})")
+        return " | ".join(reasons)
 
 def load_songs(csv_path: str) -> List[Dict]:
     """
@@ -72,7 +87,7 @@ def load_songs(csv_path: str) -> List[Dict]:
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     """
     Scores one song against the user's preferences using a weighted formula:
-      genre match = 30%, mood match = 25%, energy proximity = 20%,
+      genre match = 15%, mood match = 25%, energy proximity = 40%,
       tempo proximity = 10%, valence = 5%, danceability = 5%, acousticness = 5%.
     Categorical features award full points on exact match; numerical features
     use proximity scoring (closer to the user's target = higher score).
@@ -82,9 +97,9 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     score = 0.0
     reasons = []
 
-    # Genre: 30%
+    # Genre: 15% (halved from 30% for sensitivity test)
     if song.get("genre") == user_prefs.get("genre"):
-        score += 0.30
+        score += 0.15
         reasons.append(f"genre matches ({song['genre']})")
 
     # Mood: 25%
@@ -92,9 +107,9 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         score += 0.25
         reasons.append(f"mood matches ({song['mood']})")
 
-    # Energy proximity: 20%
+    # Energy proximity: 40% (doubled from 20% for sensitivity test)
     target_energy = user_prefs.get("energy", 0.5)
-    energy_score = (1 - abs(target_energy - song["energy"])) * 0.20
+    energy_score = (1 - abs(target_energy - song["energy"])) * 0.40
     score += energy_score
     reasons.append(f"energy proximity {energy_score:.2f} (song={song['energy']}, target={target_energy})")
 
