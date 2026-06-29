@@ -59,38 +59,47 @@ The energy scoring formula rewards a song for being *close* to the user's target
 
 ## 7. Evaluation  
 
-How you checked whether the recommender behaved as expected. 
+Ten user profiles were tested across two categories: standard profiles that represent realistic listeners, and adversarial or edge-case profiles designed to stress-test the system.
 
-Prompts:  
+**Standard profiles tested:**
 
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
+- **Late-night coder** — lofi, chill, energy 0.4. Returned Midnight Coding and Library Rain at the top, both lofi and chill. This was the clearest success: genre, mood, and energy all aligned, and the results matched intuition immediately.
+- **Morning run** — pop, happy, energy 0.8. Returned Sunrise City as #1 (pop, happy, energy 0.82), which felt right. Gym Hero appeared at #2 despite being tagged "intense" rather than "happy" — it ranked there purely because it shares the pop genre and has high energy (0.93), which shows the genre weight doing its job even when mood doesn't match.
+- **Study session** — ambient, focused, energy 0.3. Only one ambient song exists (Spacewalk Thoughts) and it is tagged "chill," not "focused." The system returned Focus Flow (lofi, focused) at #1 after the weight shift experiment, which was surprising — a song in the wrong genre outranked the only genre match because its mood was correct. This revealed that genre and mood can cancel each other out when the catalog is sparse.
 
-No need for numeric metrics unless you created some.
+*Late-night coder vs. Morning run:* These two profiles produced the most confident top recommendations in the whole test. Both have genres with multiple catalog entries (lofi: 3 songs, pop: 2 songs) and their moods are well-represented. The difference is energy — lofi pushes results toward low-tempo, mellow tracks while pop pulls toward louder, uptempo ones. The gap between their #1 scores (1.03 vs 1.00) shows how catalog density advantages the lofi user slightly.
+
+**Adversarial and edge-case profiles tested:**
+
+- **Sad Raver** — EDM, sad, energy 0.97. Genre and mood pointed in opposite directions: the only EDM song (Neon Pulse) is tagged "euphoric," not "sad." The system resolved this by favoring genre — Neon Pulse ranked #1 — while the only "sad" song (Dusty Road, blues) ranked #2 despite having energy 0.33, far from the 0.97 target. The system chose genre loyalty over mood and energy accuracy.
+- **K-Pop Stan** — k-pop, happy, energy 0.75. K-pop does not exist in the catalog, so the genre bonus was never awarded. The system fell back entirely on mood and energy, returning Rooftop Lights (indie pop, happy) and Sunrise City (pop, happy) at the top. The results were reasonable, but the user received no indication their genre was missing.
+- **Max Everything** — metal, angry, energy 1.0. Red Lights (metal, angry, energy 0.96) dominated at 1.00 and the #2–5 results were all high-energy songs from unrelated genres. This showed the system working correctly under extremes: when a perfect genre+mood match exists, no other song comes close.
+- **Perfectly Neutral** — lofi, chill, energy 0.5. Behaved identically to the Late-night coder profile but with slightly lower energy scores throughout, since 0.5 is further from the catalog's lofi cluster (0.35–0.42) than 0.4 is.
+- **Unplugged Gymrat** — folk, peaceful, energy 0.9. The catalog's only folk song (Mountain Echo) has energy 0.30 — exactly opposite of what the user wants. It still ranked #1 because genre (2 pts) + mood (1 pt) = 3 pts, which no other song could overcome despite their better energy match. The genre weight effectively overrode the energy conflict entirely.
+- **Silence Seeker** — classical, melancholic, energy 0.0. Rainy Window (classical, melancholic, energy 0.22) ranked #1 comfortably. Everything below it was sorted purely by how close the energy was to 0.0, which meant ambient and folk tracks appeared ahead of louder genres. This was one of the more intuitive outputs.
+- **Genre Avoider** — lofi, focused, energy 0.4. Focus Flow scored a near-perfect 1.04 (slightly over 1.0 due to the weight-shift experiment making weights sum to 1.05). This was the only case where a single song dominated so completely that the #2–5 results felt like filler.
+
+*Sad Raver vs. K-Pop Stan:* Both profiles have a genre-mood conflict, but of different kinds. The Sad Raver has a genre that exists in the catalog but whose only entry clashes with their mood — so the system picks a side (genre wins). The K-Pop Stan has a genre that doesn't exist at all — so the system quietly ignores genre entirely and routes through mood. The Sad Raver gets a genre match they didn't fully want; the K-Pop Stan gets mood matches with no genre relevance. Neither user gets a truly satisfying result, but for different structural reasons.
+
+*Unplugged Gymrat vs. Silence Seeker:* These two profiles both had conflicting signals — the Gymrat wanted high energy from a low-energy genre, while the Silence Seeker wanted very low energy which the catalog barely supports. The Gymrat's conflict was resolved in favor of genre (folk won over energy), while the Silence Seeker's conflict simply exposed a catalog gap (no truly silent songs exist). What surprised us about the Gymrat result was how large the genre+mood bonus is — even a 0.60 energy penalty couldn't displace Mountain Echo from #1.
+
+**What surprised the most:** Doubling the energy weight (from 20% to 40%) during the sensitivity test barely changed the top-ranked songs for most profiles. Only the Study session profile had its #1 result change — and in that case the change was arguably worse (a lofi song displaced the only ambient song). This suggested the system is more sensitive to catalog gaps than to weight tuning: fixing the data would have a larger impact than adjusting the formula.
 
 ---
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+- **Expand the catalog.** The current 20-song dataset creates artificial ceilings — no matter how the weights are tuned, a user who wants k-pop or reggae will never get a genre match. A realistic catalog would need at least a few hundred songs with balanced genre and mood coverage before the scoring logic could be properly evaluated.
+- **Replace exact-string genre matching with a similarity measure.** Genres like "indie pop" and "pop," or "EDM" and "electronic," are closely related but currently treated as completely different. A simple lookup table of genre families would let the system award partial credit for near-matches rather than treating every genre miss as equally wrong.
+- **Add a diversity constraint to the top-k selection.** Currently the system can return two songs from the same artist or three songs with nearly identical scores. A re-ranking step that penalizes repeated artists or genres within the top 5 would make the results feel less like a filter bubble and more like a genuine variety of suggestions.
+- **Expand the `likes_acoustic` preference from a boolean to a continuous value.** It could work the way energy already works — letting users express "somewhat acoustic" rather than forcing a hard yes-or-no choice. The same idea could apply to tempo and valence, which currently use silent default values when the user has not expressed a preference.
 
 ---
 
 ## 9. Personal Reflection  
 
-A few sentences about your experience.  
+Building this system made it clear that the hardest part of a recommender is not the algorithm — it is the data. Adjusting the genre weight from 30% to 15% and doubling the energy weight barely changed the output for most users, but a single missing genre (k-pop) completely broke the experience for that user profile. The formula felt less important than what was in the catalog to begin with.
 
-Prompts:  
+The most surprising discovery was how the conflict cases resolved. When a user's genre and mood pointed in opposite directions — like the Sad Raver who wanted EDM but also wanted sadness — the system did not try to balance them. It simply picked the higher-weight signal (genre) and ignored the other. There was no warning, no explanation, and no acknowledgment that the two preferences were in tension. That behavior would be invisible and frustrating in a real app.
 
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+This changed how I think about recommendation systems like Spotify or YouTube Music. When an app recommends something that feels slightly off, it is easy to assume the algorithm is wrong. But this project showed that the more likely explanation is that the catalog does not actually contain what the user wants, and the system is doing its best with what is available — it just does not say so.  

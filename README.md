@@ -674,36 +674,32 @@ Loaded songs: 20
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+**Weight shift — doubled energy, halved genre:**
+The genre weight was changed from 30% to 15% and the energy weight from 20% to 40% in `score_song` to test how sensitive the rankings were to weight tuning. For most profiles, the top recommendation did not change at all — the same song ranked #1 before and after. The one notable exception was the Study session profile, where Focus Flow (lofi, focused) overtook Spacewalk Thoughts (ambient, chill) because the exact energy match now outweighed the genre advantage. This showed that weight tuning has limited impact when the catalog only has one or two songs per genre — fixing the data matters more than adjusting the formula.
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+**Adversarial profiles — conflicting preferences:**
+Profiles whose genre and mood pointed in opposite directions (Sad Raver: EDM genre + sad mood) and whose genre did not exist in the catalog at all (K-Pop Stan: k-pop genre) were both tested. In both cases the system returned results without errors, but the recommendations were unsatisfying. The Sad Raver always received the EDM song (Neon Pulse) at #1 because genre outweighs mood — the sadness preference was silently ignored. The K-Pop Stan received mood-based results with no genre match and no indication that k-pop was missing from the catalog entirely.
+
+**Edge cases — extreme and neutral energy:**
+A profile with `target_energy=0.0` (Silence Seeker) and one with `target_energy=1.0` (Max Everything) were both run. The Max Everything profile worked well — Red Lights (metal, angry, energy 0.96) dominated at 1.00 and the results were intuitive. The Silence Seeker was more revealing: the quietest song in the catalog has energy 0.22, so the user never received a close energy match. The top results were still correct by genre and mood, but the energy scores were systematically lower than any other profile's — a direct consequence of catalog gaps at the low-energy end.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+- **Tiny catalog:** With only 20 songs across 17 genres, most genres have exactly one song. Users whose genre has no catalog entry receive no genre credit at all, and the system does not warn them.
+- **No lyric or language awareness:** Two songs with identical genre, mood, and energy scores are treated as identical even if one has explicit lyrics and the other is instrumental. Language and lyrical content are completely invisible to the scorer.
+- **Genre favoritism based on catalog size:** Lofi fans receive better recommendations than fans of any other genre simply because lofi has 3 songs instead of 1. This is a data bias, not an algorithmic one, but the effect is real.
+- **Conflict cases fail silently:** When a user's genre and mood are contradictory (e.g., EDM + sad), the system resolves the conflict by favoring the higher-weight signal with no explanation or warning to the user.
+- **Scores can exceed 1.0:** After the weight-shift experiment, the weights in `score_song` sum to 1.05 instead of 1.00, meaning perfect-match songs score slightly above the stated maximum. This is a leftover artifact from the experiment and should be corrected before treating scores as a true 0–1 scale.
 
 ---
 
 ## Reflection
 
-Read and complete `model_card.md`:
-
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
+Building this recommender made it clear that a scoring formula is only as good as the data it operates on. Tuning weights — doubling energy, halving genre — barely changed the output for most profiles. The real bottleneck was always the catalog: a user who wants k-pop or reggae will never get a genre match no matter what the weights are, because those genres simply do not exist in the dataset. This mirrors how real streaming services work: when Spotify feels like it doesn't "get" your taste, it is often because the catalog or the training data underrepresents your genre, not because the algorithm is fundamentally broken.
 
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+The bias analysis was the most eye-opening part. The expectation going in was to find problems with the formula — wrong weights, bad math — but the most serious unfairness came from the data distribution instead. Low-energy users are structurally disadvantaged because the catalog has nine high-energy songs and only two below 0.30. Users with rare moods like melancholic or euphoric have at most one song that can ever earn their mood bonus. These are not edge cases; they are predictable outcomes of building a system on an unbalanced dataset. Any real recommender system carries the same risk at a much larger scale, and the effects are often invisible to the people using it.  
 
